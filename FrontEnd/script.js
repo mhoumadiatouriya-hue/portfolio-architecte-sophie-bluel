@@ -1,13 +1,20 @@
+// Pour garder tous les projets en mémoire
+let allWorks = [];
+
+// Pour charger les projets depuis l'API
 async function loadWorks() {
-    // Appel à l'API backend
     const response = await fetch("http://localhost:5678/api/works");
     const works = await response.json();
 
-    // Sélection de la galerie
-    const gallery = document.querySelector(".gallery");
-    gallery.innerHTML = ""; // on vide le contenu statique
+    allWorks = works;
+    displayWorks(works);
+}
 
-    // Pour chaque travail reçu, on crée une figure
+// Pour afficher les projets dans la galerie
+function displayWorks(works) {
+    const gallery = document.querySelector(".gallery");
+    gallery.innerHTML = "";
+
     works.forEach(work => {
         const figure = document.createElement("figure");
         const img = document.createElement("img");
@@ -23,5 +30,47 @@ async function loadWorks() {
     });
 }
 
-// On lance le chargement au démarrage de la page
+// Pour charger les filtres catégories
+async function loadFilters() {
+    const response = await fetch("http://localhost:5678/api/categories");
+    const categories = await response.json();
+
+    const filtersDiv = document.querySelector(".filters");
+
+    // Bouton "Tous"
+    const btnAll = document.createElement("button");
+    btnAll.textContent = "Tous";
+    btnAll.classList.add("active");
+    filtersDiv.appendChild(btnAll);
+
+    btnAll.addEventListener("click", () => {
+        setActiveButton(btnAll);
+        displayWorks(allWorks);
+    });
+
+    // Boutons catégories
+    categories.forEach(category => {
+        const button = document.createElement("button");
+        button.textContent = category.name;
+        filtersDiv.appendChild(button);
+
+        button.addEventListener("click", () => {
+            setActiveButton(button);
+            const filteredWorks = allWorks.filter(
+                work => work.categoryId === category.id
+            );
+            displayWorks(filteredWorks);
+        });
+    });
+}
+
+// Pour gérer le bouton actif
+function setActiveButton(activeButton) {
+    const buttons = document.querySelectorAll(".filters button");
+    buttons.forEach(btn => btn.classList.remove("active"));
+    activeButton.classList.add("active");
+}
+
+// Pour le lancement au chargement de la page
 loadWorks();
+loadFilters();
