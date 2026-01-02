@@ -47,17 +47,23 @@ table {
 	border-spacing: 0;
 }
 /** end reset css**/
+
+/* =========================
+   Base du site
+   ========================= */
 body {
 	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
 }
+
 section {
 	margin: 50px 0
 }
@@ -75,7 +81,6 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
@@ -84,12 +89,13 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
@@ -98,6 +104,10 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+
+/* =========================
+   Intro
+   ========================= */
 #introduction {
 	display: flex;
 	align-items: center;
@@ -110,21 +120,24 @@ li:hover {
 	margin: auto;
 	width: 80%;
 }
-
 #introduction article {
 	flex: 1
 }
 #introduction h2 {
 	margin-bottom: 1em;
 }
-
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+/* =========================
+   Portfolio (base)
+   ========================= */
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -135,15 +148,17 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
+/* =========================
+   Contact
+   ========================= */
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
-
 }
 #contact h2{
 	margin-bottom: 20px;
@@ -154,7 +169,6 @@ margin: auto;
 	display: flex;
 	flex-direction: column;
 }
-
 #contact input {
 	height: 50px;
 	font-size: 1.2em;
@@ -180,11 +194,18 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+/* =========================
+   Footer
+   ========================= */
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
 }
+
+/* =========================
+   Filtres
+   ========================= */
 .filters {
 	display: flex;
 	justify-content: center;
@@ -208,33 +229,31 @@ footer nav ul {
 	color: white;
 }
 
+/* =========================
+   Login
+   ========================= */
 #login {
   width: 50%;
   margin: 150px auto 300px auto;
   text-align: center;
 }
-
 #login h2 {
   margin-bottom: 30px;
 }
-
 #login form {
   text-align: left;
   display: flex;
   flex-direction: column;
 }
-
 #login label {
   margin: 2em 0 1em 0;
 }
-
 #login input {
   height: 50px;
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-
 #login input[type="submit"] {
   font-family: 'Syne';
   font-weight: 700;
@@ -259,6 +278,10 @@ footer nav ul {
   margin-top: 10px;
   min-height: 18px;
 }
+
+/* =========================
+   Barre mode édition
+   ========================= */
 .edit-bar {
   position: fixed;
   top: 0;
@@ -277,14 +300,9 @@ body.edit-mode {
   padding-top: 59px;
 }
 
-.edit-btn {
-  margin-left: 20px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-/* ===== MODALE ===== */
+/* =========================
+   Modale
+   ========================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -316,18 +334,6 @@ body.edit-mode {
   background: transparent;
   font-size: 26px;
   cursor: pointer;
-}
-
-/* Pour la flèche en bas à gauche */
-.modal-back {
-  position: absolute;
-  bottom: 30px;
-  left: 30px;
-  border: none;
-  background: transparent;
-  font-size: 18px;
-  cursor: pointer;
-  display: none;
 }
 
 .modal-title {
@@ -431,12 +437,18 @@ body.edit-mode {
   margin-top: 10px;
   min-height: 18px;
 }
+
+/* =========================
+   Items modale + poubelle
+   ========================= */
 .modal-item {
   position: relative;
 }
 
 .modal-item img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
@@ -444,15 +456,118 @@ body.edit-mode {
   position: absolute;
   top: 6px;
   right: 6px;
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   border: none;
-  background: black;
-  color: white;
-  border-radius: 2px;
+  background: #000;
   cursor: pointer;
-  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+}
+
+.trash-btn i {
+  color: #fff;
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* =========================================================
+   ✅ CE QUE J'AI AJUSTÉ POUR LA MAQUETTE OC
+   - Titre "Mes projets" + bouton "modifier" : même ligne, CENTRÉS
+   - Bouton modifier : pas de style bouton chelou (pas de carré)
+   - Flèche retour (Ajout photo) : en haut à gauche
+   ========================================================= */
+
+/* 1) Wrapper titre + modifier sur une seule ligne et centré */
+#portfolio .portfolio-header {
+  display: flex;
+  justify-content: center;   /* ✅ centrage (c'est ça qui manquait) */
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 1em;
+}
+
+/* Le titre ne doit pas rajouter une marge qui décale le bouton */
+#portfolio .portfolio-header h2 {
+  margin: 0;
+}
+
+/* 2) Style du bouton modifier : propre et neutre (comme la maquette) */
+.edit-btn{
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  cursor: pointer;
+
+  font-family: "Work Sans";
+  font-size: 14px;
+  line-height: 1;
+  color: #000;
+
+  white-space: nowrap; /* ✅ évite "modifier" de passer à la ligne */
+}
+
+.edit-btn:hover{
+  opacity: 0.85;
+}
+
+/* Taille icône modifier (img / svg / i) */
+.edit-icon{
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+.edit-btn svg,
+.edit-btn i,
+.edit-btn img{
+  width: 16px !important;
+  height: 16px !important;
+  display: inline-block;
+}
+
+/* 3) Flèche retour dans Ajout photo : en haut à gauche (tu m'as dit que c'était OK) */
+.modal-back{
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  bottom: auto;
+  right: auto;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  display: none; /* affichée seulement sur la vue Ajout photo via JS */
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.modal-back i,
+.modal-back svg{
+  width: 18px;
+  height: 18px;
+  color: #000;
+  fill: none;
+  stroke: #000;
+}
+
+.modal-back:hover{
+  background: rgba(0,0,0,0.06);
+  border-radius: 50%;
 }

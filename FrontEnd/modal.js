@@ -1,5 +1,7 @@
 let modal = null;
-let activeView = "gallery"; // "gallery" | "add"
+let activeView = "gallery";
+
+const API_BASE = "http://localhost:5678/api";
 
 export function initModal() {
   if (document.getElementById("modal-overlay")) return;
@@ -8,6 +10,7 @@ export function initModal() {
   document.body.appendChild(modal);
 
   const overlay = document.getElementById("modal-overlay");
+
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) closeModal();
   });
@@ -39,90 +42,160 @@ function buildModal() {
   overlay.id = "modal-overlay";
   overlay.className = "modal-overlay";
 
-  overlay.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Gestion des travaux">
-      <button class="modal-close" type="button" aria-label="Fermer">×</button>
+  const modalEl = document.createElement("div");
+  modalEl.className = "modal";
+  modalEl.setAttribute("role", "dialog");
+  modalEl.setAttribute("aria-modal", "true");
+  modalEl.setAttribute("aria-label", "Gestion des travaux");
 
-      <button class="modal-back" type="button" aria-label="Retour">
-        ←
-      </button>
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "modal-close";
+  closeBtn.type = "button";
+  closeBtn.setAttribute("aria-label", "Fermer");
+  closeBtn.textContent = "×";
+  closeBtn.addEventListener("click", closeModal);
 
-      <h3 class="modal-title"></h3>
-
-      <!-- VUE 1 : Galerie -->
-      <div class="modal-view modal-view-gallery">
-        <div class="modal-gallery"></div>
-        <hr class="modal-separator" />
-        <button class="modal-primary" type="button" id="open-add-view">Ajouter une photo</button>
-      </div>
-
-      <!-- VUE 2 : Ajout -->
-      <div class="modal-view modal-view-add">
-        <form id="add-work-form">
-          <div class="upload-box">
-            <div class="upload-preview" id="upload-preview">
-              <img alt="" />
-            </div>
-
-            <input type="file" id="work-image" accept="image/*" hidden />
-            <button type="button" class="upload-btn" id="pick-image">+ Ajouter photo</button>
-            <p class="upload-hint">jpg, png : 4mo max</p>
-          </div>
-
-          <label for="work-title">Titre</label>
-          <input type="text" id="work-title" required />
-
-          <label for="work-category">Catégorie</label>
-          <select id="work-category" required>
-            <option value="">-- Sélectionner --</option>
-          </select>
-
-          <hr class="modal-separator" />
-
-          <button class="modal-primary" type="submit" id="submit-work" disabled>Valider</button>
-          <p class="modal-error" id="modal-error"></p>
-        </form>
-      </div>
-    </div>
-  `;
-
-  // fermeture
-  overlay.querySelector(".modal-close").addEventListener("click", closeModal);
-
-  // retour vers galerie
-  const backBtn = overlay.querySelector(".modal-back");
+  const backBtn = document.createElement("button");
+  backBtn.className = "modal-back";
+  backBtn.type = "button";
+  backBtn.setAttribute("aria-label", "Retour");
+  backBtn.textContent = "←";
   backBtn.addEventListener("click", () => renderView("gallery"));
 
-  // aller vers ajout
-  overlay.querySelector("#open-add-view").addEventListener("click", () => renderView("add"));
+  const title = document.createElement("h3");
+  title.className = "modal-title";
 
-  // pick image
-  overlay.querySelector("#pick-image").addEventListener("click", () => {
-    overlay.querySelector("#work-image").click();
-  });
+  const galleryView = document.createElement("div");
+  galleryView.className = "modal-view modal-view-gallery";
 
-  // preview image
-  overlay.querySelector("#work-image").addEventListener("change", () => {
-    const file = overlay.querySelector("#work-image").files?.[0];
+  const modalGallery = document.createElement("div");
+  modalGallery.className = "modal-gallery";
+
+  const sep1 = document.createElement("hr");
+  sep1.className = "modal-separator";
+
+  const openAddBtn = document.createElement("button");
+  openAddBtn.className = "modal-primary";
+  openAddBtn.type = "button";
+  openAddBtn.id = "open-add-view";
+  openAddBtn.textContent = "Ajouter une photo";
+  openAddBtn.addEventListener("click", () => renderView("add"));
+
+  galleryView.appendChild(modalGallery);
+  galleryView.appendChild(sep1);
+  galleryView.appendChild(openAddBtn);
+
+  const addView = document.createElement("div");
+  addView.className = "modal-view modal-view-add";
+  addView.style.display = "none";
+
+  const form = document.createElement("form");
+  form.id = "add-work-form";
+
+  const uploadBox = document.createElement("div");
+  uploadBox.className = "upload-box";
+
+  const uploadPreview = document.createElement("div");
+  uploadPreview.className = "upload-preview";
+  uploadPreview.id = "upload-preview";
+
+  const previewImg = document.createElement("img");
+  previewImg.alt = "";
+  uploadPreview.appendChild(previewImg);
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.id = "work-image";
+  fileInput.accept = "image/*";
+  fileInput.hidden = true;
+
+  const pickBtn = document.createElement("button");
+  pickBtn.type = "button";
+  pickBtn.className = "upload-btn";
+  pickBtn.id = "pick-image";
+  pickBtn.textContent = "+ Ajouter photo";
+  pickBtn.addEventListener("click", () => fileInput.click());
+
+  const hint = document.createElement("p");
+  hint.className = "upload-hint";
+  hint.textContent = "jpg, png : 4mo max";
+
+  uploadBox.appendChild(uploadPreview);
+  uploadBox.appendChild(fileInput);
+  uploadBox.appendChild(pickBtn);
+  uploadBox.appendChild(hint);
+
+  const labelTitle = document.createElement("label");
+  labelTitle.setAttribute("for", "work-title");
+  labelTitle.textContent = "Titre";
+
+  const inputTitle = document.createElement("input");
+  inputTitle.type = "text";
+  inputTitle.id = "work-title";
+  inputTitle.required = true;
+
+  const labelCat = document.createElement("label");
+  labelCat.setAttribute("for", "work-category");
+  labelCat.textContent = "Catégorie";
+
+  const selectCat = document.createElement("select");
+  selectCat.id = "work-category";
+  selectCat.required = true;
+
+  const optDefault = document.createElement("option");
+  optDefault.value = "";
+  optDefault.textContent = "-- Sélectionner --";
+  selectCat.appendChild(optDefault);
+
+  const sep2 = document.createElement("hr");
+  sep2.className = "modal-separator";
+
+  const submitBtn = document.createElement("button");
+  submitBtn.className = "modal-primary";
+  submitBtn.type = "submit";
+  submitBtn.id = "submit-work";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Valider";
+
+  const errorEl = document.createElement("p");
+  errorEl.className = "modal-error";
+  errorEl.id = "modal-error";
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
     if (!file) return;
 
-    const img = overlay.querySelector("#upload-preview img");
-    img.src = URL.createObjectURL(file);
-    overlay.querySelector("#upload-preview").classList.add("has-image");
-
+    previewImg.src = URL.createObjectURL(file);
+    uploadPreview.classList.add("has-image");
     updateSubmitState();
   });
 
-  // validation live
-  overlay.querySelector("#work-title").addEventListener("input", updateSubmitState);
-  overlay.querySelector("#work-category").addEventListener("change", updateSubmitState);
+  inputTitle.addEventListener("input", updateSubmitState);
+  selectCat.addEventListener("change", updateSubmitState);
 
-  // submit : POST /works
-  overlay.querySelector("#add-work-form").addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     await submitNewWork();
   });
 
+  form.appendChild(uploadBox);
+  form.appendChild(labelTitle);
+  form.appendChild(inputTitle);
+  form.appendChild(labelCat);
+  form.appendChild(selectCat);
+  form.appendChild(sep2);
+  form.appendChild(submitBtn);
+  form.appendChild(errorEl);
+
+  addView.appendChild(form);
+
+  modalEl.appendChild(closeBtn);
+  modalEl.appendChild(backBtn);
+  modalEl.appendChild(title);
+  modalEl.appendChild(galleryView);
+  modalEl.appendChild(addView);
+
+  overlay.appendChild(modalEl);
   return overlay;
 }
 
@@ -140,14 +213,12 @@ function renderView(view) {
     galleryView.style.display = "block";
     addView.style.display = "none";
     backBtn.style.display = "none";
-
     renderModalGallery();
   } else {
     title.textContent = "Ajout photo";
     galleryView.style.display = "none";
     addView.style.display = "block";
     backBtn.style.display = "inline-flex";
-
     loadCategoriesIntoSelect();
     resetAddForm();
     updateSubmitState();
@@ -156,7 +227,6 @@ function renderView(view) {
   activeView = view;
 }
 
-/* ====== Catégories dynamiques ====== */
 async function loadCategoriesIntoSelect() {
   const overlay = document.getElementById("modal-overlay");
   if (!overlay) return;
@@ -167,7 +237,7 @@ async function loadCategoriesIntoSelect() {
   if (select.options.length > 1) return;
 
   try {
-    const res = await fetch("http://localhost:5678/api/categories");
+    const res = await fetch(`${API_BASE}/categories`);
     const cats = await res.json();
 
     cats.forEach((c) => {
@@ -177,7 +247,7 @@ async function loadCategoriesIntoSelect() {
       select.appendChild(opt);
     });
   } catch {
-    // silencieux
+    // noop
   }
 }
 
@@ -185,30 +255,36 @@ function resetAddForm() {
   const overlay = document.getElementById("modal-overlay");
   if (!overlay) return;
 
-  overlay.querySelector("#modal-error").textContent = "";
-  overlay.querySelector("#work-title").value = "";
-  overlay.querySelector("#work-image").value = "";
-  overlay.querySelector("#work-category").value = "";
-
+  const errorEl = overlay.querySelector("#modal-error");
+  const titleInput = overlay.querySelector("#work-title");
+  const fileInput = overlay.querySelector("#work-image");
+  const select = overlay.querySelector("#work-category");
   const preview = overlay.querySelector("#upload-preview");
-  preview.classList.remove("has-image");
-  preview.querySelector("img").src = "";
+  const img = preview?.querySelector("img");
+
+  if (errorEl) errorEl.textContent = "";
+  if (titleInput) titleInput.value = "";
+  if (fileInput) fileInput.value = "";
+  if (select) select.value = "";
+
+  if (preview) preview.classList.remove("has-image");
+  if (img) img.src = "";
 }
 
 function updateSubmitState() {
   const overlay = document.getElementById("modal-overlay");
   if (!overlay) return;
 
-  const title = overlay.querySelector("#work-title").value.trim();
-  const cat = overlay.querySelector("#work-category").value;
-  const file = overlay.querySelector("#work-image").files?.[0];
+  const title = overlay.querySelector("#work-title")?.value.trim();
+  const cat = overlay.querySelector("#work-category")?.value;
+  const file = overlay.querySelector("#work-image")?.files?.[0];
 
-  overlay.querySelector("#submit-work").disabled = !(title && cat && file);
+  const submit = overlay.querySelector("#submit-work");
+  if (submit) submit.disabled = !(title && cat && file);
 }
 
-/* ====== Étape 7 : Galerie + suppression ====== */
 async function fetchWorks() {
-  const res = await fetch("http://localhost:5678/api/works");
+  const res = await fetch(`${API_BASE}/works`);
   return res.json();
 }
 
@@ -219,7 +295,7 @@ export async function renderModalGallery() {
   const container = overlay.querySelector(".modal-gallery");
   if (!container) return;
 
-  container.innerHTML = "";
+  container.textContent = "";
 
   const works = await fetchWorks();
   works.forEach((work) => container.appendChild(buildModalItem(work)));
@@ -227,19 +303,31 @@ export async function renderModalGallery() {
 
 function buildModalItem(work) {
   const item = document.createElement("div");
-  item.classList.add("modal-item");
+  item.className = "modal-item";
   item.dataset.modalId = work.id;
 
-  item.innerHTML = `
-    <img src="${work.imageUrl}" alt="${work.title}">
-    <button class="trash-btn" type="button" aria-label="Supprimer" data-trash-id="${work.id}">
-      🗑
-    </button>
-  `;
+  const img = document.createElement("img");
+  img.src = work.imageUrl;
+  img.alt = work.title;
 
-  item.querySelector(".trash-btn").addEventListener("click", async () => {
+  const trashBtn = document.createElement("button");
+  trashBtn.className = "trash-btn";
+  trashBtn.type = "button";
+  trashBtn.setAttribute("aria-label", "Supprimer");
+  trashBtn.dataset.trashId = work.id;
+
+  const icon = document.createElement("i");
+  icon.classList.add("fa-solid", "fa-trash-can");
+  icon.setAttribute("aria-hidden", "true");
+
+  trashBtn.appendChild(icon);
+
+  trashBtn.addEventListener("click", async () => {
     await deleteWork(work.id);
   });
+
+  item.appendChild(img);
+  item.appendChild(trashBtn);
 
   return item;
 }
@@ -248,7 +336,7 @@ async function deleteWork(id) {
   const token = localStorage.getItem("token");
   if (!token) return;
 
-  const res = await fetch(`http://localhost:5678/api/works/${id}`, {
+  const res = await fetch(`${API_BASE}/works/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -265,26 +353,25 @@ async function deleteWork(id) {
   if (pageItem) pageItem.remove();
 }
 
-/* ====== Étape 8 : POST /works + AJOUT DYNAMIQUE DOM ====== */
 async function submitNewWork() {
   const overlay = document.getElementById("modal-overlay");
   if (!overlay) return;
 
   const errorEl = overlay.querySelector("#modal-error");
-  errorEl.textContent = "";
+  if (errorEl) errorEl.textContent = "";
 
   const token = localStorage.getItem("token");
   if (!token) {
-    errorEl.textContent = "Vous devez être connecté.";
+    if (errorEl) errorEl.textContent = "Vous devez être connecté.";
     return;
   }
 
-  const title = overlay.querySelector("#work-title").value.trim();
-  const category = overlay.querySelector("#work-category").value;
-  const imageFile = overlay.querySelector("#work-image").files?.[0];
+  const title = overlay.querySelector("#work-title")?.value.trim();
+  const category = overlay.querySelector("#work-category")?.value;
+  const imageFile = overlay.querySelector("#work-image")?.files?.[0];
 
   if (!title || !category || !imageFile) {
-    errorEl.textContent = "Veuillez compléter tous les champs.";
+    if (errorEl) errorEl.textContent = "Veuillez compléter tous les champs.";
     return;
   }
 
@@ -294,32 +381,25 @@ async function submitNewWork() {
   formData.append("category", category);
 
   try {
-    const res = await fetch("http://localhost:5678/api/works", {
+    const res = await fetch(`${API_BASE}/works`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
 
     if (!res.ok) {
-      errorEl.textContent = "Erreur : le formulaire n'a pas pu être envoyé.";
+      if (errorEl) errorEl.textContent = "Erreur : le formulaire n'a pas pu être envoyé.";
       return;
     }
 
-    //  Réponse API = nouveau work
     const newWork = await res.json();
 
-    //  1) Ajout dynamique dans la galerie de la page
     addWorkToHomeGallery(newWork);
-
-    //  2) Ajout dynamique dans la galerie de la modale
     addWorkToModalGallery(newWork);
 
-    //  3) Retour à la galerie
     renderView("gallery");
   } catch {
-    errorEl.textContent = "Erreur serveur. Réessaie plus tard.";
+    if (errorEl) errorEl.textContent = "Erreur serveur. Réessaie plus tard.";
   }
 }
 
@@ -339,7 +419,6 @@ function addWorkToHomeGallery(work) {
 
   figure.appendChild(img);
   figure.appendChild(caption);
-
   gallery.appendChild(figure);
 }
 
