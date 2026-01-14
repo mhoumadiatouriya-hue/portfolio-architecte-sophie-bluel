@@ -11,9 +11,9 @@
 	<title>Sophie Bluel - Architecte d'intérieur</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Font Awesome (icônes : pen-to-square, etc.) -->
+	 <!-- Icônes (poubelle, etc.) utilisées dans la modale -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <!-- Polices utilisées dans la maquette -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
@@ -27,8 +27,10 @@
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
+			<!-- Navigation simple -->
 			<li><a href="#portfolio">projets</a></li>
 			<li><a href="#contact">contact</a></li>
+			<!-- Ce lien devient "logout" quand l'utilisateur est connecté (auth.js) -->
 			<li><a href="./login.html">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
@@ -49,8 +51,11 @@
 	</section>
 
 	<section id="portfolio">
+		<!-- Le titre "Mes projets" est regroupé avec le bouton "modifier" quand on est connecté (auth.js) -->
 		<h2>Mes Projets</h2>
+		<!-- Zone vide au départ : les filtres sont ajoutés en JS (script.js) -->
 		<div class="filters"></div>
+		<!-- Zone vide au départ : la galerie est construite en JS (script.js) -->
 		<div class="gallery"></div>
 	</section>
 
@@ -79,6 +84,7 @@
 		</ul>
 	</nav>
 </footer>
+ <!-- Script en module : permet d'utiliser import/export (script.js importe auth.js et modal.js) -->
 <script type="module" src="./script.js"></script>
 </body>
 </html>
