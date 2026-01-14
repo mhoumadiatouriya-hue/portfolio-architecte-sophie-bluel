@@ -474,7 +474,6 @@ body.edit-mode {
 }
 
 /* =========================================================
-   ✅ CE QUE J'AI AJUSTÉ POUR LA MAQUETTE OC
    - Titre "Mes projets" + bouton "modifier" : même ligne, CENTRÉS
    - Bouton modifier : pas de style bouton chelou (pas de carré)
    - Flèche retour (Ajout photo) : en haut à gauche
@@ -483,7 +482,7 @@ body.edit-mode {
 /* 1) Wrapper titre + modifier sur une seule ligne et centré */
 #portfolio .portfolio-header {
   display: flex;
-  justify-content: center;   /* ✅ centrage (c'est ça qui manquait) */
+  justify-content: center;   /* centrage  */
   align-items: center;
   gap: 18px;
   margin-bottom: 1em;
@@ -515,7 +514,7 @@ body.edit-mode {
   line-height: 1;
   color: #000;
 
-  white-space: nowrap; /* ✅ évite "modifier" de passer à la ligne */
+  white-space: nowrap; /*  évite "modifier" de passer à la ligne */
 }
 
 .edit-btn:hover{
@@ -537,7 +536,7 @@ body.edit-mode {
   display: inline-block;
 }
 
-/* 3) Flèche retour dans Ajout photo : en haut à gauche (tu m'as dit que c'était OK) */
+/* 3) Flèche retour dans Ajout photo : en haut à gauche */
 .modal-back{
   position: absolute;
   top: 18px;
