@@ -6,6 +6,7 @@
 // - Si c'est correct : récupérer le token, le stocker, puis revenir à la page d'accueil
 // - Si c'est incorrect : afficher un message d'erreur
 // =======================================================
+
 // On récupère le formulaire et la zone où on affiche les erreurs
 const form = document.getElementById("login-form");
 const errorEl = document.getElementById("login-error");
@@ -48,7 +49,7 @@ form.addEventListener("submit", async (event) => {
 
   // On revient sur la page d'accueil
     window.location.href = "./index.html";
-    
+
   } catch (err) {
         // Erreur réseau / serveur / API indisponible
     console.error(err);
