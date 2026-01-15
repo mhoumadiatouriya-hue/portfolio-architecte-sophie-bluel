@@ -473,12 +473,6 @@ body.edit-mode {
   line-height: 1;
 }
 
-/* =========================================================
-   - Titre "Mes projets" + bouton "modifier" : même ligne, CENTRÉS
-   - Bouton modifier : pas de style bouton chelou (pas de carré)
-   - Flèche retour (Ajout photo) : en haut à gauche
-   ========================================================= */
-
 /* 1) Wrapper titre + modifier sur une seule ligne et centré */
 #portfolio .portfolio-header {
   display: flex;
@@ -493,7 +487,7 @@ body.edit-mode {
   margin: 0;
 }
 
-/* 2) Style du bouton modifier : propre et neutre (comme la maquette) */
+/* 2) Style du bouton modifier */
 .edit-btn{
   appearance: none;
   -webkit-appearance: none;
@@ -514,7 +508,7 @@ body.edit-mode {
   line-height: 1;
   color: #000;
 
-  white-space: nowrap; /*  évite "modifier" de passer à la ligne */
+  white-space: nowrap; /*  évite à "modifier" de passer à la ligne */
 }
 
 .edit-btn:hover{
