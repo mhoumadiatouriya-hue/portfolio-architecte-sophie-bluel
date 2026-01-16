@@ -56,7 +56,7 @@ export function closeModal() {
   activeView = "gallery";
 }
 
-// La focntion buildModal Crée la structure HTML de la modale 
+// La fonction buildModal crée la structure HTML de la modale 
 // Avec fond gris, fenêtre blanche, boutons, titre etc.
 function buildModal() {
   // === OVERLAY (fond semi-transparent) ===
