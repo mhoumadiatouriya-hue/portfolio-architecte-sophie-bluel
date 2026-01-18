@@ -1,11 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Log In - Sophie Bluel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Polices utilisées dans la maquette -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet" />
-  <meta name="description" content="" />
+  <!-- Polices utilisées dans la maquette -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+    rel="stylesheet"
+  >
+
+  <meta name="description" content="">
+
   <!-- Même CSS que la page d'accueil (style login inclus dedans) -->
-  <link rel="stylesheet" href="./assets/style.css" />
+  <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
@@ -13,11 +24,13 @@
   <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
   <nav>
     <ul>
-       <!-- Liens pour revenir à l'accueil -->
+      <!-- Liens pour revenir à l'accueil -->
       <li><a href="./index.html">projets</a></li>
       <li><a href="./index.html#contact">contact</a></li>
-       <!-- On est sur la page login -->
+
+      <!-- On est sur la page login -->
       <li><a href="./login.html" class="active-link">login</a></li>
+
       <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
     </ul>
   </nav>
@@ -26,17 +39,19 @@
 <main>
   <section id="login">
     <h2>Log In</h2>
- <!-- Formulaire de connexion : géré en JavaScript par login.js -->
+
+    <!-- Formulaire de connexion : géré en JavaScript par login.js -->
     <form id="login-form">
       <label for="email">E-mail</label>
-      <input type="email" name="email" id="email" />
+      <input type="email" name="email" id="email">
 
       <label for="password">Mot de passe</label>
-      <input type="password" name="password" id="password" />
-       <!-- Zone d'erreur : on affiche ici un message si identifiants incorrects -->
+      <input type="password" name="password" id="password">
+
+      <!-- Zone d'erreur : on affiche ici un message si identifiants incorrects -->
       <p id="login-error" class="login-error"></p>
-      
-      <input type="submit" value="Se connecter" />
+
+      <input type="submit" value="Se connecter">
     </form>
 
     <a href="#" class="forgot-password">Mot de passe oublié</a>
