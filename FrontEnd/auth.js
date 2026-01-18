@@ -33,12 +33,23 @@ function addEditBar() {
   const bar = document.createElement("div");
   bar.classList.add("edit-bar");
 
+  // Conteneur pour aligner icône + texte proprement
+  const content = document.createElement("div");
+  content.style.display = "flex";
+  content.style.alignItems = "center";
+  content.style.gap = "10px";
+
+  // Icône (réutilisation de la même logique que ton bouton "modifier")
+  const icon = createEditIcon();
+
+  // Texte "Mode édition"
   const text = document.createElement("span");
   text.textContent = "Mode édition";
 
-  bar.appendChild(text);
+  content.appendChild(icon);
+  content.appendChild(text);
+  bar.appendChild(content);
 
-  // On place la barre tout en haut de la page
   document.body.prepend(bar);
 }
 
